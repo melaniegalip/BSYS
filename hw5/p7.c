@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main()
+{
+    int pid = fork();
+
+    if (pid == -1)
+    {
+        printf("Fork failed\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (pid == 0)
+    {
+        // Child process
+        printf("Child process closing stdout\n");
+        close(STDOUT_FILENO);
+        printf("This output won't be visible\n");
+        exit(EXIT_SUCCESS);
+    }
+    else
+    {
+        // Parent process
+        int status;
+        wait(&status);
+        printf("Child process exited with status %d\n", status);
+    }
+
+    return 0;
+}
